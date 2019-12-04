@@ -1,8 +1,8 @@
 package com.Vortex.Test.Controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,18 +14,20 @@ public class TestController {
         return "newLoginPanda.html";
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    @ResponseBody
-    String test(){
-        return "<h1>welcome</h1>";
+
+    // Login form with error
+    @RequestMapping("/login-error.html")
+    public String loginError(Model model) {
+        model.addAttribute("loginError", true);
+        return "newLoginPanda.html";
     }
 
-    @RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/", "/welcome**"}, method = RequestMethod.GET)
     @ResponseBody
     public String welcomePage() {
 
 
-        return "welcome";
+        return "<h1>Welcome, You have been Authenticated</h1>";
 
     }
 

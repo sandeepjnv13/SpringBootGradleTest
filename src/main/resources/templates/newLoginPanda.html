@@ -133,6 +133,8 @@
 	<div class="inputGroup inputGroup3">
 		<button id="login">Log in</button>
 	</div>
+	<p th:if="${loginError}" class="error" style="color:#FF0000">Wrong user or password</p>
+
 </form>
 <!-- partial -->
   <script th:src="@{/public/TweenMax.js}"></script>
