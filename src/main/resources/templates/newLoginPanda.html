@@ -1,4 +1,16 @@
-<form>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="eng">
+<head>
+  <meta charset="UTF-8">
+  <title>Animated SVG Avatar v2</title>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel="stylesheet" th:href="@{/public/style.css}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<form th:action="@{/login.html}" method="post">
 	<div class="svgContainer">
 		<div>
 			<svg class="mySVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200">
@@ -104,15 +116,15 @@
 			</svg>
 		</div>
 	</div>
-	
+
 	<div class="inputGroup inputGroup1">
-		<label for="loginEmail" id="loginEmailLabel">Email</label>
-		<input type="email" id="loginEmail" maxlength="254" />
+		<label for="loginEmail" id="loginEmailLabel"  >Email</label>
+		<input type="text" id="loginEmail" name="username" maxlength="254" />
 		<p class="helper helper1">email@domain.com</p>
 	</div>
 	<div class="inputGroup inputGroup2">
 		<label for="loginPassword" id="loginPasswordLabel">Password</label>
-		<input type="password" id="loginPassword" />
+		<input type="password" id="loginPassword" name = "password"/>
 		<label id="showPasswordToggle" for="showPasswordCheck">Show
 			<input id="showPasswordCheck" type="checkbox"/>
 			<div class="indicator"></div>
@@ -120,5 +132,11 @@
 	</div>
 	<div class="inputGroup inputGroup3">
 		<button id="login">Log in</button>
-	</div>	
+	</div>
 </form>
+<!-- partial -->
+  <script th:src="@{/public/TweenMax.js}"></script>
+<script th:src="@{/public/MorphSVGPlugin.js}"></script><script  th:src="@{/public/script.js}"></script>
+
+</body>
+</html>
