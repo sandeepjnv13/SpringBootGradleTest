@@ -1,5 +1,6 @@
 package com.Vortex.Test.Controllers;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,6 +38,22 @@ public class TestController {
     public String adminPage() {
 
         return "welcome admin";
+
+    }
+
+    @RequestMapping(value = "/user**", method = RequestMethod.GET)
+    @ResponseBody
+    public String userPage(Authentication token) {
+        String user = token.getName();
+        return "welcome " + user;
+
+    }
+
+    @RequestMapping(value = "/test**", method = RequestMethod.GET)
+    @ResponseBody
+    public String testPage() {
+
+        return "test welcome";
 
     }
 

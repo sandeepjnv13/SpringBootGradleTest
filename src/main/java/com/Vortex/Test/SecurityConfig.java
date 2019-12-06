@@ -11,7 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+
 
 @Configuration
 @EnableWebSecurity
@@ -19,26 +22,60 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    /*@Autowired
+    DataSource dataSource;*/
+
+    @Autowired
+    MyUserDetailsService myUserDetailsService;
+
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
+        // in memory authentication
+        /*auth.inMemoryAuthentication()
                 //.passwordEncoder(passwordEncoder)
-                .withUser("user").password(passwordEncoder.encode("user")).roles("USER")
+                .withUser("user").password(passwordEncoder.encode("user")).roles("User")
                 .and()
-                .withUser("admin").password(passwordEncoder.encode("admin")).roles("USER", "ADMIN");
+                .withUser("admin").password(passwordEncoder.encode("admin")).roles("User", "Admin")
+                .and()
+                .withUser("test").password(passwordEncoder.encode("test")).roles();*/
+
+        // Embedded sql authentication
+        /*auth.jdbcAuthentication().dataSource(dataSource)
+                .withDefaultSchema() // if we give empty h2 [sql] database to spring security it can implement default schema
+                .withUser(
+                        User.withUsername("User")
+                                    .password("userPas")
+                                    .roles("User")
+                )
+                .withUser(
+                User.withUsername("Admin")
+                        .password("adminPas")
+                        .roles("Admin", "User")
+                )
+                .withUser(
+                        User.withUsername("test")
+                                .password("test")
+                                .roles()
+                );*/
+
+        // Authentication using a userdefined service
+        auth.userDetailsService(myUserDetailsService);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
+        //return new BCryptPasswordEncoder();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers( "/public/**").permitAll()
-                .anyRequest()//allow all urls
-                .authenticated()//all URLs are allowed by any authenticated user, no role restrictions.
+                .antMatchers("/admin").authenticated()//.hasRole("Admin")
+                .antMatchers("/user").authenticated()//.hasAnyRole("User", "Admin")
+                .antMatchers("/*").authenticated()
                 .and()
                 .formLogin()//enable form based authentication
                 .loginPage("/login.html")//use a custom login URI
@@ -65,24 +102,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic(); */
     }
-
-    /*@Bean
-    WebMvcConfigurer myWebMvcConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-
-            @Override
-            public void addViewControllers(ViewControllerRegistry registry) {
-                ViewControllerRegistration r = registry.addViewController("/my-login");
-                r.setViewName("myLogInPage");
-            }
-        };
-    }*/
-
-    /*@Bean
-    public ViewResolver viewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setPrefix("/WEB-INF/views/");
-        viewResolver.setSuffix(".jsp");
-        return viewResolver;
-    }*/
 }
